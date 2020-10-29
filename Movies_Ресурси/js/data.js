@@ -90,7 +90,7 @@ async function createMovies(movie) {
 }
 
 // edit movie
-async function updateMovies(id, updatedProps) {
+async function updateMovie(id, updatedProps) {
     const token = localStorage.getItem("userToken");
 
     return (await fetch(host(endpoints.MOVIE_BY_ID + id), {
@@ -117,11 +117,11 @@ async function deleteMovie(id) {
 }
 
 // buy ticket
-async function buyTicket(movieId) {
-    const token = localStorage.getItem("userToken");
+async function buyTicket(movie) {
+    let currentTickets = movie.tickets - 1;
+    let movieId = movie.objectId;
 
-    // obtain userId
-    // make request
+    return updateMovie(movieId, { tickets: currentTickets });
 }
 
 // get movie by Id
@@ -130,6 +130,7 @@ async function getMoviesByOwner(ownerId) {
 
     return (await fetch(host(endpoints.MOVIES + `where=ownerId%3D%27${ownerId}%27`), {
         headers: {
+            "Content-Type": "application/json",
             "user-token": token
         }
     })).json();
